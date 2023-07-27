@@ -119,7 +119,8 @@ public final class JasperPrintManager
 		) throws JRException
 	{
 		//artf1936
-		boolean checkAvailablePrinters = JRPropertiesUtil.getInstance(jasperReportsContext).getBooleanProperty(jasperPrint, PROPERTY_CHECK_AVAILABLE_PRINTERS, true);
+		//Refactoring: long identifier:  PROPERTY_CHECK_AVAILABLE_PRINTERS -> PROP_CHK_AVAIL_PRINTERS
+		boolean checkAvailablePrinters = JRPropertiesUtil.getInstance(jasperReportsContext).getBooleanProperty(jasperPrint, PROP_CHK_AVAIL_PRINTERS, true);
 		if (checkAvailablePrinters && !JRPrintServiceExporter.checkAvailablePrinters()) 
 		{
 			throw 
@@ -461,5 +462,5 @@ public final class JasperPrintManager
 			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT},
 			sinceVersion = PropertyConstants.VERSION_3_7_3
 			)
-	public static final String PROPERTY_CHECK_AVAILABLE_PRINTERS = JRPropertiesUtil.PROPERTY_PREFIX + "awt.check.available.printers";
+	public static final String PROP_CHK_AVAIL_PRINTERS = JRPropertiesUtil.PROPERTY_PREFIX + "awt.check.available.printers";
 }
