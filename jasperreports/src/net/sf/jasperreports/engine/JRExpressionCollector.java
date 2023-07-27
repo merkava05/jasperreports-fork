@@ -1508,34 +1508,66 @@ public class JRExpressionCollector
 	}
 
 
-	private void collectCrosstabCells(JRCrosstab crosstab, JRExpressionCollector crosstabCollector)
-	{
-		if (crosstab instanceof JRDesignCrosstab)
-		{
-			List<JRCrosstabCell> cellsList = ((JRDesignCrosstab) crosstab).getCellsList();
+//	private void collectCrosstabCells(JRCrosstab crosstab, JRExpressionCollector crosstabCollector)
+//	{
+//		if (crosstab instanceof JRDesignCrosstab)
+//		{
+//			List<JRCrosstabCell> cellsList = ((JRDesignCrosstab) crosstab).getCellsList();
+//
+//			if (cellsList != null)
+//			{
+//				for (Iterator<JRCrosstabCell> iter = cellsList.iterator(); iter.hasNext();)
+//				{
+//					JRCrosstabCell cell = iter.next();
+//					crosstabCollector.collect(cell.getContents());
+//				}
+//			}
+//		}
+//		else
+//		{
+//			JRCrosstabCell[][] cells = crosstab.getCells();
+//			if (cells != null)
+//			{
+//				for (int i = 0; i < cells.length; ++i)
+//				{
+//					for (int j = 0; j < cells[i].length; j++)
+//					{
+//						if (cells[i][j] != null)
+//						{
+//							crosstabCollector.collect(cells[i][j].getContents());
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
 
-			if (cellsList != null)
-			{
-				for (Iterator<JRCrosstabCell> iter = cellsList.iterator(); iter.hasNext();)
-				{
-					JRCrosstabCell cell = iter.next();
-					crosstabCollector.collect(cell.getContents());
-				}
+
+	//Refactoring: extract complex method into small methods
+	private void collectCrosstabCells(JRCrosstab crosstab, JRExpressionCollector crosstabCollector) {
+		if (crosstab instanceof JRDesignCrosstab) {
+			collectDesignCrosstabCells((JRDesignCrosstab) crosstab, crosstabCollector);
+		} else {
+			collectCrosstabCellsArray(crosstab.getCells(), crosstabCollector);
+		}
+	}
+
+	private void collectDesignCrosstabCells(JRDesignCrosstab crosstab, JRExpressionCollector crosstabCollector) {
+		List<JRCrosstabCell> cellsList = crosstab.getCellsList();
+
+		if (cellsList != null) {
+			for (JRCrosstabCell cell : cellsList) {
+				crosstabCollector.collect(cell.getContents());
 			}
 		}
-		else
-		{
-			JRCrosstabCell[][] cells = crosstab.getCells();
-			if (cells != null)
-			{
-				for (int i = 0; i < cells.length; ++i)
-				{
-					for (int j = 0; j < cells[i].length; j++)
-					{
-						if (cells[i][j] != null)
-						{
-							crosstabCollector.collect(cells[i][j].getContents());
-						}
+	}
+
+	private void collectCrosstabCellsArray(JRCrosstabCell[][] cells, JRExpressionCollector crosstabCollector) {
+		if (cells != null) {
+			for (JRCrosstabCell[] cellRow : cells) {
+				for (JRCrosstabCell cell : cellRow) {
+					if (cell != null) {
+						crosstabCollector.collect(cell.getContents());
 					}
 				}
 			}
