@@ -37,9 +37,9 @@ import net.sf.jasperreports.engine.JRConstants;
  * @author Narcis Marcu (narcism@users.sourceforge.net)
  */
 public class FormatCondition implements Serializable {
-	
+
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	private String conditionStart;
 	private String conditionEnd;
 	private String conditionTypeOperator;
@@ -49,7 +49,7 @@ public class FormatCondition implements Serializable {
 	private String conditionFontColor;
 	private String conditionFontBackColor;
 	private String conditionMode;
-	
+
 	public FormatCondition() {
 	}
 
@@ -125,20 +125,30 @@ public class FormatCondition implements Serializable {
 		this.conditionMode = conditionMode;
 	}
 
-	//Refactoring: long parameter list -> create a ComparisonConfig class to wrap parameters
-	public boolean matches(ComparisonConfig config, String conditionTypeOperator) {
+	public boolean matches(
+			Object compareTo,
+			String conditionType,
+			String conditionPattern,
+			String conditionTypeOperator,
+			Locale locale,
+			TimeZone timeZone
+	)
+	{
 		AbstractFieldComparator<?> fieldComparator =
-				FieldComparatorFactory.createFieldComparator(
-						config.getConditionType(),
-						config.getConditionPattern(),
-						config.getLocale(),
-						config.getTimeZone()
-				);
+				FieldComparatorFactory
+						.createFieldComparator(
+								FilterTypesEnum.getByName(conditionType),
+								conditionPattern,
+								locale,
+								timeZone
+						);
 
-		fieldComparator.setCompareTo(config.getCompareTo());
-		fieldComparator.setCompareToClass(config.getCompareTo() != null ? config.getCompareTo().getClass() : Object.class);
+		fieldComparator.setValueStart(conditionStart);
+		fieldComparator.setValueEnd(conditionEnd);
+		fieldComparator.setCompareTo(compareTo);
+		fieldComparator.setCompareToClass(compareTo != null ? compareTo.getClass() : Object.class);
+
 		return fieldComparator.compare(conditionTypeOperator);
 	}
 
-	
 }
