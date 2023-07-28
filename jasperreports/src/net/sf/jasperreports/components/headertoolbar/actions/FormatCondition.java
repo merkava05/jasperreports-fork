@@ -43,12 +43,24 @@ public class FormatCondition implements Serializable {
 	private String conditionStart;
 	private String conditionEnd;
 	private String conditionTypeOperator;
-	private Boolean conditionFontBold;
-	private Boolean conditionFontItalic;
-	private Boolean conditionFontUnderline;
-	private String conditionFontColor;
-	private String conditionFontBackColor;
+
 	private String conditionMode;
+
+
+	/*
+	* 	Refactoring:
+	* 	move 5 font related variables and getter/setter to a new class FormatCondition.java
+	* 	Should also modify HeaderToolbarConditionalStyleProvider.java
+	* */
+	private FontCondition conditionFont;
+
+	public FontCondition getConditionFont() {
+		return conditionFont;
+	}
+
+	public void setConditionFont(FontCondition conditionFont) {
+		this.conditionFont = conditionFont;
+	}
 
 	public FormatCondition() {
 	}
@@ -77,45 +89,7 @@ public class FormatCondition implements Serializable {
 		this.conditionTypeOperator = conditionTypeOperator;
 	}
 
-	public Boolean isConditionFontBold() {
-		return conditionFontBold;
-	}
 
-	public void setConditionFontBold(Boolean conditionFontBold) {
-		this.conditionFontBold = conditionFontBold;
-	}
-
-	public Boolean isConditionFontItalic() {
-		return conditionFontItalic;
-	}
-
-	public void setConditionFontItalic(Boolean conditionFontItalic) {
-		this.conditionFontItalic = conditionFontItalic;
-	}
-
-	public Boolean isConditionFontUnderline() {
-		return conditionFontUnderline;
-	}
-
-	public void setConditionFontUnderline(Boolean conditionFontUnderline) {
-		this.conditionFontUnderline = conditionFontUnderline;
-	}
-
-	public String getConditionFontColor() {
-		return conditionFontColor;
-	}
-
-	public void setConditionFontColor(String conditionFontColor) {
-		this.conditionFontColor = conditionFontColor;
-	}
-
-	public String getConditionFontBackColor() {
-		return conditionFontBackColor;
-	}
-
-	public void setConditionFontBackColor(String conditionFontBackColor) {
-		this.conditionFontBackColor = conditionFontBackColor;
-	}
 
 	public String getConditionMode() {
 		return conditionMode;
