@@ -59,22 +59,22 @@ public class FillPrintPartQueue
 	}
 
 
-	//Refactoring: Update appendOutput and appendDelayed, replace append() -> filledPart.appendTo()
+	//Refactoring: Update appendOutput and appendDelayed, replace append() -> filledPart.append()
 	public FilledPrintPart appendOutput(PartPrintOutput output) {
 		FilledPrintPart filledPart = new FilledPrintPart(output);
-		filledPart.appendTo(this);
+		filledPart.append(this);
 		return filledPart;
 	}
 
 	public DelayedPrintPart appendDelayed(FillPart fillPart) {
 		DelayedPrintPart delayedPart = new DelayedPrintPart(fillPart);
-		delayedPart.appendTo(this);
+		delayedPart.append(this);
 		return delayedPart;
 	}
 
 
 	//Refactoring: append(FillPrintPart part) method interacts more with the FillPrintPart class -> move it to FillPrintPart
-	//add setTail(FillPrintPart part)
+	//add setTail(FillPrintPart part) so that tail can be updated
 	public void setTail(FillPrintPart newTail) {
 		this.tail = newTail;
 	}
