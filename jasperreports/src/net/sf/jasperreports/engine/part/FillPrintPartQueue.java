@@ -58,26 +58,35 @@ public class FillPrintPartQueue
 		return head == tail;
 	}
 
-	public FilledPrintPart appendOutput(PartPrintOutput output)
-	{
+
+	//Refactoring: Update appendOutput and appendDelayed, replace append() -> filledPart.append()
+	public FilledPrintPart appendOutput(PartPrintOutput output) {
 		FilledPrintPart filledPart = new FilledPrintPart(output);
-		append(filledPart);
+		filledPart.append(this);
 		return filledPart;
 	}
 
-	public DelayedPrintPart appendDelayed(FillPart fillPart)
-	{
+	public DelayedPrintPart appendDelayed(FillPart fillPart) {
 		DelayedPrintPart delayedPart = new DelayedPrintPart(fillPart);
-		append(delayedPart);
+		delayedPart.append(this);
 		return delayedPart;
 	}
-	
-	protected void append(FillPrintPart part)
-	{
-		part.setPreviousPart(tail);
-		tail.setNextPart(part);
-		tail = part;
+
+
+	//Refactoring: append(FillPrintPart part) method interacts more with the FillPrintPart class -> move it to FillPrintPart
+	//add setTail(FillPrintPart part) so that tail can be updated
+	public void setTail(FillPrintPart newTail) {
+		this.tail = newTail;
 	}
+
+
+
+//	protected void append(FillPrintPart part)
+//	{
+//		part.setPreviousPart(tail);
+//		tail.setNextPart(part);
+//		tail = part;
+//	}
 
 	public void fillDelayed(DelayedPrintPart part, PartReportFiller filler, byte evaluation) throws JRException
 	{

@@ -27,6 +27,7 @@ import java.awt.Color;
 
 import net.sf.jasperreports.components.headertoolbar.actions.ConditionalFormattingCommand;
 import net.sf.jasperreports.components.headertoolbar.actions.ConditionalFormattingData;
+import net.sf.jasperreports.components.headertoolbar.actions.FontCondition;
 import net.sf.jasperreports.components.headertoolbar.actions.FormatCondition;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRStyle;
@@ -88,8 +89,11 @@ public class HeaderToolbarConditionalStyleProvider implements StyleProvider
 					boolean fontUnderlineSet = false;
 					boolean foreColorSet = false;
 					boolean modeSet = false;
-					for (FormatCondition condition: cfd.getConditions()) 
+					for (FormatCondition condition: cfd.getConditions())
 					{
+						//Refactoring: change font related condition to fontCondition
+						FontCondition fontCondition = condition.getConditionFont();
+
 						if(
 							condition.matches(
 								compareTo, 
@@ -106,24 +110,24 @@ public class HeaderToolbarConditionalStyleProvider implements StyleProvider
 								style = new JRBaseStyle();
 							}
 							
-							if (condition.isConditionFontBold() != null && !fontBoldSet) 
+							if (fontCondition.isConditionFontBold() != null && !fontBoldSet)
 							{
-								style.setBold(condition.isConditionFontBold());
+								style.setBold(fontCondition.isConditionFontBold());
 								fontBoldSet = true;
 							}
-							if (condition.isConditionFontItalic() != null && !fontItalicSet)
+							if (fontCondition.isConditionFontItalic() != null && !fontItalicSet)
 							{
-								style.setItalic(condition.isConditionFontItalic());
+								style.setItalic(fontCondition.isConditionFontItalic());
 								fontItalicSet = true;
 							}
-							if (condition.isConditionFontUnderline() != null && !fontUnderlineSet)
+							if (fontCondition.isConditionFontUnderline() != null && !fontUnderlineSet)
 							{
-								style.setUnderline(condition.isConditionFontUnderline());
+								style.setUnderline(fontCondition.isConditionFontUnderline());
 								fontUnderlineSet = true;
 							}
-							if (condition.getConditionFontColor() != null && !foreColorSet) 
+							if (fontCondition.getConditionFontColor() != null && !foreColorSet)
 							{
-								style.setForecolor(JRColorUtil.getColor("#" + condition.getConditionFontColor(), Color.black));
+								style.setForecolor(JRColorUtil.getColor("#" + fontCondition.getConditionFontColor(), Color.black));
 								foreColorSet = true;
 							}
 							if (condition.getConditionMode() != null && !modeSet)
@@ -131,9 +135,9 @@ public class HeaderToolbarConditionalStyleProvider implements StyleProvider
 								style.setMode(ModeEnum.getByName(condition.getConditionMode()));
 								modeSet = true;
 							}
-							if (condition.getConditionFontBackColor() != null && !bgColorSet) 
+							if (fontCondition.getConditionFontBackColor() != null && !bgColorSet)
 							{
-								style.setBackcolor(JRColorUtil.getColor("#" + condition.getConditionFontBackColor(), Color.white));
+								style.setBackcolor(JRColorUtil.getColor("#" + fontCondition.getConditionFontBackColor(), Color.white));
 								bgColorSet = true;
 							}
 						}
