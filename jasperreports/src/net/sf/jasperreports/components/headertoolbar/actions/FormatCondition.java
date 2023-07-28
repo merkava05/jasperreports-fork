@@ -124,31 +124,21 @@ public class FormatCondition implements Serializable {
 	public void setConditionMode(String conditionMode) {
 		this.conditionMode = conditionMode;
 	}
-	
-	public boolean matches(
-		Object compareTo, 
-		String conditionType, 
-		String conditionPattern, 
-		String conditionTypeOperator,
-		Locale locale,
-		TimeZone timeZone
-		) 
-	{
-		AbstractFieldComparator<?> fieldComparator = 
-			FieldComparatorFactory
-				.createFieldComparator(
-					FilterTypesEnum.getByName(conditionType),
-					conditionPattern,
-					locale,
-					timeZone
-					);
-		
-		fieldComparator.setValueStart(conditionStart);
-		fieldComparator.setValueEnd(conditionEnd);
-		fieldComparator.setCompareTo(compareTo);
-		fieldComparator.setCompareToClass(compareTo != null ? compareTo.getClass() : Object.class);
-		
+
+	//Refactoring: long parameter list -> create a ComparisonConfig class to wrap parameters
+	public boolean matches(ComparisonConfig config, String conditionTypeOperator) {
+		AbstractFieldComparator<?> fieldComparator =
+				FieldComparatorFactory.createFieldComparator(
+						config.getConditionType(),
+						config.getConditionPattern(),
+						config.getLocale(),
+						config.getTimeZone()
+				);
+
+		fieldComparator.setCompareTo(config.getCompareTo());
+		fieldComparator.setCompareToClass(config.getCompareTo() != null ? config.getCompareTo().getClass() : Object.class);
 		return fieldComparator.compare(conditionTypeOperator);
 	}
+
 	
 }
