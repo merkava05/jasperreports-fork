@@ -57,5 +57,13 @@ public abstract class FillPrintPart
 	}
 	
 	public abstract PartPrintOutput getOutput();
+
+
+	//Refactoring: move append here
+	public void appendTo(FillPrintPartQueue queue) {
+		this.setPreviousPart(queue.tail());
+		queue.tail().setNextPart(this);
+		queue.setTail(this);
+	}
 	
 }
